@@ -1,5 +1,5 @@
 <?php
   // Create database connection
   
-  $db = mysqli_connect("sql201.epizy.com", "epiz_30816694", "GpG6xNZxVe927l", "epiz_30816694_elections");
+  $db = mysqli_connect("rs3.rcnoc.com", "gorgeous_elections", "elections8445", "gorgeous_elections");
 ?>
