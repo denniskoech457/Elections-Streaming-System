@@ -1,3 +1,4 @@
+
 <?php 
   session_start(); 
   if (!isset($_SESSION['admin_id'])) {
@@ -18,7 +19,7 @@ if (isset($_GET['logout'])) {
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Election 2022</title>
+        <title>ELECTIONS 2022</title>
         <link type="text/css" href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
         <link type="text/css" href="bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet">
         <link type="text/css" href="css/theme.css" rel="stylesheet">
@@ -37,30 +38,48 @@ if (isset($_GET['logout'])) {
                 <div class="row">
                
                     <div class="span9">
-                        <div class="content">
+                        <div class="content"> 
+                            <div class="module-head">
+								<h3>WARDS</h3>
+								<a href="add-wards.php?consti_id=<?php echo $type= $_GET['consti_id']; ?>&type_id=<?php echo $type= $_GET['type_id']; ?>" class="btn btn-primary">+ ADD WARDS</a>
+							</div>
+                            <br>
+                            <hr>
                             <div class="btn-controls">
+                           
+						
                                 <div class="btn-box-row row-fluid">
-                                <a href="add-constituency.php?type_id=<?php echo $type= $_GET['type_id']; ?>" class="btn-box big span4"><i class=" icon-random"></i>
-                                        <p class="text-muted">
-                                            + ADD CONSTITUENCY POSITIONS </p>
-                                    </a>
-                                    <a href="add-positions.php?type_id=<?php echo $type= $_GET['type_id']; ?>" class="btn-box big span4"><i class=" icon-random"></i>
-                                        <p class="text-muted">
-                                            + ADD ELECTION POSITIONS </p>
-                                    </a>
-                                    <a href="post-blog.php?type_id=<?php echo $type= $_GET['type_id']; ?>" class="btn-box big span4"><i class=" icon-random"></i>
-                                        <p class="text-muted">
-                                            + ADD CANDIDATES </p>
-                                    </a>
-                                    <a href="constituencies.php?type_id=<?php echo $type= $_GET['type_id']; ?>" class="btn-box big span4"><i class=" icon-random"></i>
-                                        <p class="text-muted">
-                                            CONSTITUENCIES </p>
-                                    </a>
-                                    <a href="positions.php?type_id=<?php echo $type= $_GET['type_id']; ?>" class="btn-box big span4"><i class=" icon-group"></i>
-                                        <p class="text-muted">
-                                            VIEW OR UPDATE ELECTION RESULTS</p>
-                                    </a>
+                                <?php
+                                        // Include the database configuration file
+                                        include 'dbcon.php';
+                                        
+                                        // Get records from the database
+										$type = $_GET['type_id'];
+                                        $consti_id = $_GET['consti_id'];
+                                        $query = $db->query("SELECT * FROM wards where consti_id='$consti_id' AND election_id='$type'  ");
+                                        
+                                        if($query->num_rows > 0) 
+                                            while($elecresults = $query->fetch_assoc()){
+                                                
+                                        ?>
+
                                   
+                                           
+                                            <div class="btn-box big span4">
+                                                <a href="ward-results.php?id=<?php echo $elecresults['id']; ?>&consti_id=<?php echo $_GET['consti_id']; ?>&type_id=<?php echo $type= $_GET['type_id']; ?>" ><i class="icon-group"></i>
+                                                    <p class="text-muted">
+                                                    <?php echo $elecresults['ward']; ?></p>
+                                                </a>
+                                                <br>
+                                                <br>
+                                                <a class="btn btn-danger" href="delete-ward.php?id=<?php echo $elecresults['id']; ?>&election_id=<?php echo $type= $_GET['type_id']; ?>">Delete</a>
+                                            </div>
+                                              
+                                            
+                                    <?php }
+                                    else {
+                                        echo "<h2 style='color:red;'>PLEASE ADD WARDS FIRST!!</h2>";
+                                    } ?>
                                 </div>
                                 
                             </div>
@@ -94,22 +113,6 @@ if (isset($_GET['logout'])) {
         </script>
         <?php 
          unset($_SESSION['status']);
-       }
-      ?>
-         <?php if (isset($_GET['status']) && $_GET['status'] !='' )
-        {
-          ?>
-          <script>
-          
-          swal({
-          title: "<?php echo $_GET['status']  ; ?>",
-          text: "<?php echo $_GET['more']  ; ?>",
-          icon: "<?php echo $_GET['status_code']  ; ?>",
-          button: "ok",
-          });
-        </script>
-        <?php 
-         unset($_GET['status']);
        }
       ?>
         <script src="scripts/jquery-1.9.1.min.js" type="text/javascript"></script>

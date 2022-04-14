@@ -95,7 +95,7 @@
                                         // Get records from the database
 										$type = $_GET['type_id'];
 										$position = $_GET['position'];
-                                        $query = $db->query("SELECT * FROM candidates where position='$position' and type_id='$type' ORDER BY votes");
+                                        $query = $db->query("SELECT name,position,sum(votes),party,asp_id,profilepic FROM candidates where position='$position' AND type_id='$type' group by asp_id ");
                                         
                                         if($query->num_rows > 0) 
                                             while($elecresults = $query->fetch_assoc()){
@@ -105,7 +105,7 @@
 										    <td><img style="width:50px; heigth:50px;" src="assets/img/blog/<?php echo $elecresults['profilepic']; ?>" alt="<?php echo $elecresults['name']; ?>" srcset=""></td>
 											<td><?php echo $elecresults['name']; ?></td>
 											<td><?php echo $elecresults['position']; ?></td>
-											<td><?php echo $elecresults['votes']; ?></td>
+											<td><?php echo $elecresults['sum(votes)']; ?></td>
 											<td><?php echo $elecresults['party']; ?></td>
 											
 										</tr>

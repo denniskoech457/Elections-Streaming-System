@@ -70,6 +70,8 @@ if (isset($_GET['logout'])) {
                                             <div class="controls">
                                              <input type="file" class="span8" name="profilepic" required>
 											 <input type="hidden" value="<?php echo $type= $_GET['type_id']; ?>" name="type" >
+                                             <input type="hidden" value="<?php echo $ward_id= $_GET['ward_id']; ?>" name="ward_id" >
+                                             <input type="hidden" value="<?php echo $consti_id= $_GET['consti_id']; ?>" name="consti_id" >
 											 
                                             </div>
                                         </div>
@@ -78,11 +80,9 @@ if (isset($_GET['logout'])) {
 											<div class="controls">
 
                                             <?php
+                                                    include 'dbcon.php';
 
-                                                    $conn = new mysqli('localhost', 'root', '', 'election') 
-                                                or die ('Cannot connect to db');
-
-                                                    $result = $conn->query("select  position from positions where election_id=$type");
+                                                    $result = $db->query("select  position from positions where election_id='$type' ");
 
                                                     
                                                     echo "<select name='position' tabindex='1' data-placeholder='Select here..' class='span8' required>";
@@ -109,10 +109,9 @@ if (isset($_GET['logout'])) {
 
                                             <?php
 
-                                                    $conn = new mysqli('localhost', 'root', '', 'election') 
-                                                or die ('Cannot connect to db');
+                                                                    include 'dbcon.php';
 
-                                                    $result = $conn->query("select  partyname from party");
+                                                    $result = $db->query("select  partyname from party");
 
                                                     
                                                     echo "<select name='party' tabindex='1' data-placeholder='Select here..' class='span8' required>";
@@ -135,7 +134,7 @@ if (isset($_GET['logout'])) {
 
 										<div class="control-group">
 											<div class="controls">
-												<button type="submit" name="post-results" class="btn">Add Candidate</button>
+												<button type="submit" name="add-ward-candidate" class="btn">Add Candidate</button>
 											</div>
 										</div>
 									</form>

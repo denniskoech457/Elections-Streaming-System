@@ -22,15 +22,16 @@ if (isset($_GET['logout'])) {
     <?php
 
         include "dbcon.php"; // Using database connection file here
+        $consti_id = $_GET['consti_id'];
         $type = $_GET['type_id'];
-		$position = $_GET['position'];
-        $titles = mysqli_query($db, "select * from candidates where type_id='$type'"); // fetch data from database
+		$ward_id= $_GET['id'];
+        $wardtitles = mysqli_query($db, "select * from candidates where type_id='$type' AND consti_id='$consti_id' AND id='$ward_id'"); // fetch data from database
 
-        while($data = mysqli_fetch_array($titles))
+        while($data = mysqli_fetch_array($wardtitles))
         {
         ?>
     <!-- Site Metas -->
-    <title><?php echo $position; ?> RESULTS- <?php
+    <title>WARD RESULTS- <?php
 
 include "dbcon.php"; // Using database connection file here
 $type = $_GET['type_id'];
@@ -74,7 +75,7 @@ while($data = mysqli_fetch_array($titles))
                                         
                                         // Get records from the database
 										$type = $_GET['type_id'];
-										$position = $_GET['position'];
+										
                                         $query = $db->query("SELECT * FROM elections where type_id='$type'");
                                         
                                         if($query->num_rows > 0) 
@@ -88,9 +89,8 @@ while($data = mysqli_fetch_array($titles))
 						
 							<div class="module-head">
 							    
-								<h3> <?php echo $elecresults['type']; ?> <?php echo $position;?> RESULTS-ELECTION 2022</h3>
-								<a href="post-blog.php?type_id=<?php echo $type= $_GET['type_id']; ?>" class="btn btn-primary">+ ADD ASPIRANTS</a>
-								<a href="constituencies.php?type_id=<?php echo $type= $_GET['type_id']; ?>" class="btn btn-primary">VIEW RESULTS PER WARD</a>
+								<h3> <?php echo $elecresults['type']; ?>  RESULTS-ELECTION 2022</h3>
+								<a href="add-ward-candidate.php?ward_id=<?php echo $_GET['id']; ?>&consti_id=<?php echo $_GET['consti_id']; ?>&type_id=<?php echo $type= $_GET['type_id']; ?>" class="btn btn-primary">+ ADD CANDIDATES RESULTS FOR THIS WARD</a>
 								<?php } ?>
 							</div>
 							<div class="module-body table">
@@ -113,8 +113,9 @@ while($data = mysqli_fetch_array($titles))
                                         
                                         // Get records from the database
 										$type = $_GET['type_id'];
-										$position = $_GET['position'];
-                                        $query = $db->query("SELECT name,position,sum(votes),party,asp_id,profilepic FROM candidates where position='$position' AND type_id='$type' group by asp_id");
+										$ward_id = $_GET['id'];
+                                        $consti_id = $_GET['consti_id'];
+                                        $query = $db->query("SELECT * FROM candidates where ward_id='$ward_id' AND type_id='$type' AND consti_id='$consti_id' ORDER BY votes");
                                         
                                         if($query->num_rows > 0) 
                                             while($elecresults = $query->fetch_assoc()){
@@ -124,9 +125,9 @@ while($data = mysqli_fetch_array($titles))
 										    <td><img style="width:50px; heigth:50px;" src="../assets/img/blog/<?php echo $elecresults['profilepic']; ?>" alt="<?php echo $elecresults['name']; ?>" srcset=""></td>
 											<td><?php echo $elecresults['name']; ?></td>
 											<td><?php echo $elecresults['position']; ?></td>
-											<td><?php echo $elecresults['sum(votes)']; ?></td>
+											<td><?php echo $elecresults['votes']; ?></td>
 											<td><?php echo $elecresults['party']; ?></td>	
-											<td><a href="delete-results.php?type_id=<?php echo $type; ?>&candidate_id=<?php echo $elecresults['candidate_id']; ?>" style="margin: 5px;" class="btn btn-danger">Delete results</a> <a href="update-results.php?candidate_id=<?php echo $elecresults['candidate_id']; ?>&type_id=<?php echo $type; ?>" style="margin: 5px;" class="btn btn-inverse">Update results</a>  </td>
+											<td><a href="delete-results.php?type_id=<?php echo $type; ?>&candidate_id=<?php echo $elecresults['candidate_id']; ?>" style="margin: 5px;" class="btn btn-danger">Delete results</a> <a href="update-ward-results.php?candidate_id=<?php echo $elecresults['candidate_id']; ?>&ward_id=<?php echo $ward_id ?>&type_id=<?php echo $type; ?>" style="margin: 5px;" class="btn btn-inverse">Update results</a>  </td>
 										</tr>
                                         <?php } ?>
 									
